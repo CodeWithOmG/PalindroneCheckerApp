@@ -1,36 +1,27 @@
-import java.util.Stack;
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
-public class QueueStackPalindromeChecker {
+public class PalindroneCheckerApp {
 
-    public static void main(String[] args) {
+    public static boolean isPalindrome(String input) {
+        String cleaned = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        Deque<Character> deque = new ArrayDeque<>();
 
-        String word = "madam";
-
-        Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>();
-
-        // Push to stack and enqueue to queue
-        for (char c : word.toCharArray()) {
-            stack.push(c);
-            queue.add(c);
+        for (char ch : cleaned.toCharArray()) {
+            deque.addLast(ch);
         }
 
-        boolean isPalindrome = true;
-
-        // Compare stack pop (LIFO) with queue dequeue (FIFO)
-        while (!stack.isEmpty()) {
-            if (stack.pop() != queue.remove()) {
-                isPalindrome = false;
-                break;
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
             }
         }
 
-        if (isPalindrome) {
-            System.out.println(word + " is a palindrome.");
-        } else {
-            System.out.println(word + " is not a palindrome.");
-        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPalindrome("Racecar"));
+        System.out.println(isPalindrome("Hello"));
     }
 }
