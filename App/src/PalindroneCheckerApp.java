@@ -1,47 +1,19 @@
-class Node {
-    char data;
-    Node next;
-    Node(char data) { this.data = data; }
-}
-
 public class PalindroneCheckerApp {
-    public static boolean isPalindrome(Node head) {
-        if (head == null || head.next == null) return true;
 
-        Node slow = head;
-        Node fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+    public static boolean isPalindrome(String str) {
+        if (str.length() <= 1) {
+            return true;
         }
 
-        Node prev = null;
-        Node current = slow;
-        while (current != null) {
-            Node nextNode = current.next;
-            current.next = prev;
-            prev = current;
-            current = nextNode;
+        if (str.charAt(0) == str.charAt(str.length() - 1)) {
+            return isPalindrome(str.substring(1, str.length() - 1));
         }
 
-        Node firstHalf = head;
-        Node secondHalf = prev;
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) return false;
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-
-        return true;
+        return false;
     }
 
     public static void main(String[] args) {
-        Node head = new Node('r');
-        head.next = new Node('a');
-        head.next.next = new Node('d');
-        head.next.next.next = new Node('a');
-        head.next.next.next.next = new Node('r');
-
-        System.out.println(isPalindrome(head));
+        System.out.println(isPalindrome("madam"));
+        System.out.println(isPalindrome("java"));
     }
 }
