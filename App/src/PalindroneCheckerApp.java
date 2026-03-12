@@ -1,44 +1,67 @@
-import java.util.Scanner;
+import java.util.*;
 
-class PalindromeService {
+interface PalindromeStrategy {
+    boolean isPalindrome(String text);
+}
 
-    public boolean check(String input) {
-        if (input == null) return false;
-        String normalized = normalize(input);
-        return validate(normalized);
-    }
-
-    private String normalize(String input) {
-        return input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-    }
-
-    private boolean validate(String text) {
-        int left = 0;
-        int right = text.length() - 1;
-        while (left < right) {
-            if (text.charAt(left) != text.charAt(right)) {
+class StackStrategy implements PalindromeStrategy {
+    public boolean isPalindrome(String text) {
+        String clean = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        Stack<Character> stack = new Stack<>();
+        for (char c : clean.toCharArray()) {
+            stack.push(c);
+        }
+        for (char c : clean.toCharArray()) {
+            if (c != stack.pop()) {
                 return false;
             }
-            left++;
-            right--;
         }
         return true;
+    }
+}
+
+class DequeStrategy implements PalindromeStrategy {
+    public boolean isPalindrome(String text) {
+        String clean = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char c : clean.toCharArray()) {
+            deque.addLast(c);
+        }
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+class PalindromeContext {
+    private PalindromeStrategy strategy;
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean executeStrategy(String text) {
+        if (strategy == null) return false;
+        return strategy.isPalindrome(text);
     }
 }
 
 public class PalindroneCheckerApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        PalindromeService service = new PalindromeService();
+        PalindromeContext context = new PalindromeContext();
 
-        System.out.println("Enter text to check:");
-        String userInput = sc.nextLine();
+        System.out.print("Enter text: ");
+        String input = sc.nextLine();
 
-        if (service.check(userInput)) {
-            System.out.println("Result: It is a palindrome.");
-        } else {
-            System.out.println("Result: Not a palindrome.");
-        }
+        context.setStrategy(new StackStrategy());
+        System.out.println("Stack Result: " + context.executeStrategy(input));
+
+        context.setStrategy(new DequeStrategy());
+        System.out.println("Deque Result: " + context.executeStrategy(input));
 
         sc.close();
     }
