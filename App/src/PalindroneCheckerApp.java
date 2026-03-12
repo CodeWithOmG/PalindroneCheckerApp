@@ -1,19 +1,30 @@
+import java.util.Scanner;
+
 public class PalindroneCheckerApp {
-
-    public static boolean isPalindrome(String str) {
-        if (str.length() <= 1) {
-            return true;
-        }
-
-        if (str.charAt(0) == str.charAt(str.length() - 1)) {
-            return isPalindrome(str.substring(1, str.length() - 1));
-        }
-
-        return false;
-    }
-
     public static void main(String[] args) {
-        System.out.println(isPalindrome("madam"));
-        System.out.println(isPalindrome("java"));
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter a string:");
+        String input = sc.nextLine();
+
+        // Flow: Normalize string (Remove non-alphanumeric and lowercase)
+        String clean = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        boolean isPalindrome = true;
+        int left = 0;
+        int right = clean.length() - 1;
+
+        // Flow: Apply logic (Compare front and rear)
+        while (left < right) {
+            if (clean.charAt(left) != clean.charAt(right)) {
+                isPalindrome = false;
+                break;
+            }
+            left++;
+            right--;
+        }
+
+        System.out.println("Is Palindrome: " + isPalindrome);
+        sc.close();
     }
 }
