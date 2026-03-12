@@ -1,30 +1,45 @@
 import java.util.Scanner;
 
-public class PalindroneCheckerApp {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+class PalindromeService {
 
-        System.out.println("Enter a string:");
-        String input = sc.nextLine();
+    public boolean check(String input) {
+        if (input == null) return false;
+        String normalized = normalize(input);
+        return validate(normalized);
+    }
 
-        // Flow: Normalize string (Remove non-alphanumeric and lowercase)
-        String clean = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    private String normalize(String input) {
+        return input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    }
 
-        boolean isPalindrome = true;
+    private boolean validate(String text) {
         int left = 0;
-        int right = clean.length() - 1;
-
-        // Flow: Apply logic (Compare front and rear)
+        int right = text.length() - 1;
         while (left < right) {
-            if (clean.charAt(left) != clean.charAt(right)) {
-                isPalindrome = false;
-                break;
+            if (text.charAt(left) != text.charAt(right)) {
+                return false;
             }
             left++;
             right--;
         }
+        return true;
+    }
+}
 
-        System.out.println("Is Palindrome: " + isPalindrome);
+public class PalindroneCheckerApp {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PalindromeService service = new PalindromeService();
+
+        System.out.println("Enter text to check:");
+        String userInput = sc.nextLine();
+
+        if (service.check(userInput)) {
+            System.out.println("Result: It is a palindrome.");
+        } else {
+            System.out.println("Result: Not a palindrome.");
+        }
+
         sc.close();
     }
 }
